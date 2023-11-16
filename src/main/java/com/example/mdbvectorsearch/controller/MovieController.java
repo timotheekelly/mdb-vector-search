@@ -16,12 +16,12 @@ import reactor.core.publisher.Mono;
 public class MovieController {
 
 	private final MovieService movieService;
-	
+
 	@Autowired
 	public MovieController(MovieService movieService) {
 		this.movieService = movieService;
 	}
-	
+
 	@GetMapping("/movies/semantic-search")
 	public Mono<List<Movie>> performSemanticSearch(@RequestParam("plotDescription") String plotDescription) {
 		return movieService.getMoviesSemanticSearch(plotDescription);

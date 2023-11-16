@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("embedded_movies")
 public class Movie {
-	
+
 	@Id
 	private String _id;
 	private String title;
@@ -195,16 +195,16 @@ public class Movie {
 		public void setId(int id) {
 			this.id = id;
 		}
-		
+
 		// Getters and setters for Imdb fields
 	}
 
 	public static class Tomatoes {
 		private Viewer viewer;
 		private Date lastUpdated;
-		
+
 		// Getters and setters for Tomatoes fields
-		
+
 		public Viewer getViewer() {
 			return viewer;
 		}
@@ -236,11 +236,11 @@ public class Movie {
 			}
 			private double rating;
 			private int numReviews; 
-			
+
 			// Getters and setters for Viewer fields
-			}
 		}
-		
-		// Getters and setters for Movie fields
+	}
+
+	// Getters and setters for Movie fields
 }
 

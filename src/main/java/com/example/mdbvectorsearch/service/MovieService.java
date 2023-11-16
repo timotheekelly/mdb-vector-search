@@ -25,8 +25,8 @@ public class MovieService {
 
 	private final MongoDatabase mongoDatabase;
 	private final OpenAIService embedder;
-	
-	
+
+
 	@Autowired
 	public MovieService(MongoDatabase mongoDatabase, OpenAIService embedder) {
 		this.mongoDatabase = mongoDatabase;
@@ -42,11 +42,11 @@ public class MovieService {
 	}
 
 	private MongoCollection<Document> getMovieCollection() {
-	    return mongoDatabase.getCollection("embedded_movies");
+		return mongoDatabase.getCollection("embedded_movies");
 	}
 
 	private Flux<Movie> queryMoviesByVector(List<Double> embedding) {
-		
+
 		// Our Vector Search aggregation 
 		String indexName = "PlotVectorSearch";
 		FieldSearchPath fieldSearchPath = fieldPath("plot_embedding");
@@ -62,7 +62,7 @@ public class MovieService {
 						limit));
 
 		return Flux.from(getMovieCollection().aggregate(pipeline))
-	               .map(this::documentToMovie); // Convert each Document to a Movie
+				.map(this::documentToMovie); // Convert each Document to a Movie
 	}
 
 	private Movie documentToMovie(Document document) {
