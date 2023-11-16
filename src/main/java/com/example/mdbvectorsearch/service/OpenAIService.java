@@ -20,7 +20,6 @@ public class OpenAIService {
 	private static final String OPENAI_API_URL = "https://api.openai.com";
 	
 	@Value("${openai.api.key}")
-	
 	private String OPENAI_API_KEY;
 	
 	private WebClient webClient;
