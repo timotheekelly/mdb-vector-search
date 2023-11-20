@@ -10,7 +10,6 @@ import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.search.SearchPath.fieldPath;
 import static java.util.Arrays.asList;
 
-import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ public class MovieService {
 	private final MongoDatabase mongoDatabase;
 	private final OpenAIService embedder;
 
-
 	@Autowired
 	public MovieService(MongoDatabase mongoDatabase, OpenAIService embedder) {
 		this.mongoDatabase = mongoDatabase;
@@ -34,19 +32,17 @@ public class MovieService {
 	}
 
 	public Mono<List<Movie>> getMoviesSemanticSearch(String plotDescription) {
-
-		// create the embedding using our OpenAI service
 		return embedder.createEmbedding(plotDescription)
-				.flatMapMany(embedding -> queryMoviesByVector(embedding))
+				.flatMapMany(this::queryMoviesByVector)
 				.collectList();
 	}
 
-	private MongoCollection<Document> getMovieCollection() {
-		return mongoDatabase.getCollection("embedded_movies");
+	private MongoCollection<Movie> getMovieCollection() {
+		// Now returns MongoCollection<Movie>
+		return mongoDatabase.getCollection("embedded_movies", Movie.class);
 	}
 
 	private Flux<Movie> queryMoviesByVector(List<Double> embedding) {
-
 		// Our Vector Search aggregation 
 		String indexName = "PlotVectorSearch";
 		FieldSearchPath fieldSearchPath = fieldPath("plot_embedding");
@@ -61,17 +57,6 @@ public class MovieService {
 						numCandidates,
 						limit));
 
-		return Flux.from(getMovieCollection().aggregate(pipeline))
-				.map(this::documentToMovie); // Convert each Document to a Movie
-	}
-
-	private Movie documentToMovie(Document document) {
-		// Manually convert Document to Movie
-		Movie movie = new Movie();
-		movie.set_id(document.getObjectId("_id").toString());
-		movie.setTitle(document.getString("title"));
-		movie.setPlot(document.getString("plot"));
-		// Set other fields...
-		return movie;
+		return Flux.from(getMovieCollection().aggregate(pipeline, Movie.class));
 	}
 }

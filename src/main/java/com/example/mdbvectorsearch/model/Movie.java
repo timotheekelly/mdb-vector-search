@@ -3,14 +3,16 @@ package com.example.mdbvectorsearch.model;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("embedded_movies")
 public class Movie {
 
-	@Id
-	private String _id;
+	@BsonProperty("_id")
+	private ObjectId id;
 	private String title;
 	private int year;
 	private int runtime;
@@ -29,14 +31,17 @@ public class Movie {
 	private int num_mflix_comments;
 	private String plot_embeddings;
 
-	public String get_id() {
-		return _id;
+	public Movie() {
+		
 	}
+	
+    public ObjectId getId() {
+        return id;
+    }
 
-	public void set_id(String _id) {
-		this._id = _id;
-	}
-
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 	public String getTitle() {
 		return title;
 	}
@@ -177,6 +182,11 @@ public class Movie {
 		private double rating;
 		private int votes;
 		private int id;
+		
+		public Imdb() {
+			
+		}
+		
 		public double getRating() {
 			return rating;
 		}
@@ -200,9 +210,14 @@ public class Movie {
 	}
 
 	public static class Tomatoes {
+		
 		private Viewer viewer;
 		private Date lastUpdated;
 
+		public Tomatoes() {
+			
+		}
+		
 		// Getters and setters for Tomatoes fields
 
 		public Viewer getViewer() {
@@ -222,6 +237,16 @@ public class Movie {
 		}
 
 		public static class Viewer {
+			
+			private double rating;
+			private int numReviews; 
+			
+			public Viewer() {
+				
+			}
+			
+			// Getters and setters for Viewer fields
+			
 			public double getRating() {
 				return rating;
 			}
@@ -234,10 +259,7 @@ public class Movie {
 			public void setNumReviews(int numReviews) {
 				this.numReviews = numReviews;
 			}
-			private double rating;
-			private int numReviews; 
 
-			// Getters and setters for Viewer fields
 		}
 	}
 
